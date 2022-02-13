@@ -15,8 +15,9 @@ import { cats, dogs } from "./breeds";
 
 export default function App() {
   const [search, setSarch] = useState("");
-  const [breeds, setBreeds] = useState(cats);
+  const [breeds, setBreeds] = useState("cats");
   const keyboardVerticalOffset = Platform.OS === "ios" ? 125 : 0;
+  const breedDict = breeds === "cats" ? cats : dogs;
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -24,19 +25,27 @@ export default function App() {
         keyboardVerticalOffset={keyboardVerticalOffset}
         style={styles.kav}
       >
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
         <View style={styles.listContainer}>
           <FlatList
-            data={breeds.filter((item) => item.breed.includes(search))}
+            data={breedDict.filter((item) => item.breed.includes(search))}
             renderItem={({ item, index }) => {
-              return <Item index={index} data={item} />;
+              return <Item index={index} data={item} selection={breeds} />;
             }}
             keyExtractor={(item) => item.breed}
           />
         </View>
         <View style={styles.buttons}>
-          <Button onPress={() => setBreeds(cats)} title="Cats" />
-          <Button onPress={() => setBreeds(dogs)} title="Dogs" />
+          <Button
+            onPress={() => setBreeds("cats")}
+            title="Cats"
+            color={"#FF1493"}
+          />
+          <Button
+            onPress={() => setBreeds("dogs")}
+            title="Dogs"
+            color={"#FF1493"}
+          />
         </View>
         <View>
           <TextInput
@@ -44,6 +53,7 @@ export default function App() {
             placeholder="Search"
             onChangeText={setSarch}
             value={search}
+            placeholderTextColor={"#FF1493"}
           />
         </View>
       </KeyboardAvoidingView>
@@ -66,15 +76,20 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#111111",
     alignItems: "center",
     justifyContent: "center",
   },
 
   search: {
-    fontSize: 24,
-    padding: 10,
-    fontFamily: "Futura",
+    fontSize: 21,
+    padding: 7,
+    color: "#FF1493",
+    fontFamily: "Helvetica",
+    fontWeight: "100",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
   },
 
   buttons: {
